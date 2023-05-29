@@ -5,7 +5,7 @@
     state: present
 
 - name: Add Kibana repository.
-  template:
+  ansible.builtin.template:
     src: kibana.repo.j2
     dest: /etc/yum.repos.d/kibana.repo
     mode: 0644
@@ -30,7 +30,7 @@
 
     - name: RedHat - check if requested Kibana version lock exists
       become: yes
-      shell: set -o pipefail && yum versionlock list | grep -c {{ kibana_package }}-{{ kibana_pkg_version }}
+      ansible.builtin.shell: set -o pipefail && yum versionlock list | grep -c {{ kibana_package }}-{{ kibana_pkg_version }}
       register: kb_requested_version_locked
       args:
         warn: false
@@ -40,7 +40,7 @@
 
     - name: RedHat - lock Kibana version
       become: yes
-      shell: yum versionlock delete 0:kibana* ; yum versionlock add {{ kibana_package }}-{{ kibana_pkg_version }}
+      ansible.builtin.shell: yum versionlock delete 0:kibana* ; yum versionlock add {{ kibana_package }}-{{ kibana_pkg_version }}
       args:
         warn: false
       when:
@@ -51,7 +51,7 @@
 
 - name: RedHat - check if any Kibana version lock exists
   become: yes
-  shell: set -o pipefail && yum versionlock list | grep -c kibana
+  ansible.builtin.shell: set -o pipefail && yum versionlock list | grep -c kibana
   register: kibana_version_locked
   args:
     warn: false
@@ -63,7 +63,7 @@
 
 - name: RedHat - unlock kibana version
   become: yes
-  shell: yum versionlock delete 0:kibana*
+  ansible.builtin.shell: yum versionlock delete 0:kibana*
   args:
     warn: false
   when:

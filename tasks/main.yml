@@ -6,7 +6,7 @@
   when: ansible_os_family == 'Debian'
 
 - name: Ensure Kibana log folder is created
-  file:
+  ansible.builtin.file:
     path: "{{ kibana_log_path }}"
     mode: 0750
     state: directory
@@ -15,7 +15,7 @@
   when: kibana_log_path is defined and kibana_log_path | length > 0
 
 - name: Ensure Kibana cache permissions are correct
-  file:
+  ansible.builtin.file:
     path: /usr/share/kibana/optimize
     mode: 0775
     state: directory
@@ -24,13 +24,13 @@
     recurse: yes
 
 - name: Ensure Kibana is started and enabled at boot.
-  service:
+  ansible.builtin.service:
     name: kibana
     state: "{{ kibana_service_state }}"
     enabled: "{{ kibana_service_enabled }}"
 
 - name: Copy Kibana configuration.
-  template:
+  ansible.builtin.template:
     src: "{{ kibana_config_template }}"
     dest: "{{ kibana_config_file_path }}"
     owner: root

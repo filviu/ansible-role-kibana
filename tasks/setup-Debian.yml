@@ -1,6 +1,6 @@
 ---
 - name: Ensure dependencies are installed.
-  apt:
+  ansible.builtin.apt:
     name:
       - apt-transport-https
       - gnupg2
@@ -18,7 +18,7 @@
     update_cache: true
 
 - name: Debian - Ensure Kibana is installed
-  apt:
+  ansible.builtin.apt:
     name: '{{ kibana_package }}{% if kibana_pkg_version is defined and kibana_pkg_version | length > 0 %}={{ kibana_pkg_version }}{% endif %}'
     state: "{{ kibana_package_state }}"
     cache_valid_time: 86400
